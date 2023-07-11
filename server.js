@@ -21,9 +21,7 @@ app.use((req, res, next) => {
 
   next();
 });
-
-
-// Подключение к MongoDB и установка коллекции
+ 
 // Подключение к MongoDB и установка коллекции
 async function connectToMongoDB() {
   const client = new MongoClient(url, { useUnifiedTopology: true });
@@ -46,6 +44,7 @@ app.get('/api/stock', async (req, res) => {
   }
 });
 
+// Маршрут для получения всех брендов и количество объектов в каждом
 app.get('/api/brands', async (req, res) => {
   try {
     const collection = await connectToMongoDB();
@@ -96,29 +95,7 @@ app.get('/api/brands', async (req, res) => {
     }
   });
 
-  app.get('/api/brands/:brand/models', async (req, res) => {
-    try {
-      const { brand } = req.params;
-      const { models } = req.query; // Получаем массив моделей из параметров запроса
-      console.log(models)
-      console.log(brand)
-      // Преобразуем строку с моделями в массив
-      const modelsArray = models.split(',');
-      console.log(modelsArray)
-      const collection = await connectToMongoDB();
-  
-      // Поиск объектов с указанным брендом и моделями
-      const objects = await collection.find({
-        mark: brand,
-        model: { $in: modelsArray } // Используем оператор $in для поиска по нескольким значениям
-      }).toArray();
-      console.log(objects)
-      res.json(objects);
-    } catch (error) {
-      console.error('Ошибка:', error);
-      res.status(500).send('Произошла ошибка сервера');
-    }
-  });
+ 
   
 
 // Запуск сервера
