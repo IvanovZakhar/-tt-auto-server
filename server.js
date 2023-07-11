@@ -1,8 +1,9 @@
 const express = require('express');
 const { MongoClient } = require('mongodb');
 
+require('dotenv').config();
 // Строка подключения к MongoDB
-const url = 'mongodb://hrTest:hTy785JbnQ5@mongo0.maximum.expert:27423/?authSource=hrTest&replicaSet=ReplicaSet&readPreference=primary';
+const url = process.env.MONGODB_URI;
 
 // Имя базы данных и коллекции
 const dbName = 'hrTest';
