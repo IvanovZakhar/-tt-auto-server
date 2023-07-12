@@ -11,7 +11,7 @@ const collectionName = 'stock';
 
 // Создание экземпляра сервера Express
 const app = express();
-const port = 3005;
+const port = process.env.PORT || 3005;
 
 
 app.use((req, res, next) => {
@@ -25,11 +25,19 @@ app.use((req, res, next) => {
 // Подключение к MongoDB и установка коллекции
 async function connectToMongoDB() {
   const client = new MongoClient(url, { useUnifiedTopology: true });
-  await client.connect();
-  const db = client.db(dbName);
-  const collection = db.collection(collectionName);
-  return collection;
-} 
+  try {
+    await client.connect();
+    const db = client.db(dbName);
+    const collection = db.collection(collectionName);
+    console.log("Connected to MongoDB collection:", collectionName);
+    return collection;
+  } catch (error) {
+    console.log("Failed to connect to MongoDB collection:", collectionName);
+    console.error(error);
+    throw error;
+  }
+}
+
 
 
 // Маршрут для получения всех документов
